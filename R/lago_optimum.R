@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-#' opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
+opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
   #Defining Objective Function
   eval_f <- function(x) {
     obj<- sum(cost * x) # Total cost of the intervention package
