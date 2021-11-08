@@ -16,6 +16,20 @@
 #' @export
 #'
 #' @examples
+#' # Defining vector of starting values for the algorithm
+#' x.init = c(2.5, 12.5, 7)
+#' # Defining vector of lower limits for the components
+#' x.l = c(1, 10, 2)
+#' # Defining vector of upper limits for the components
+#' x.u = c(4, 15, 15)
+#' # Defining vector of linear cost coefficients
+#' cost_lin = c(1, 8, 2.5)
+#' p_bar = 0.9 # Defining the desired outcome goal
+#' # True beta values for the study
+#' beta = c(log(0.05), log(1.2), log(1.1), log(1.3))
+#' ## Running the LAGO optimization algorithm
+#' opt_lago = opt_int(cost = cost_lin, beta = beta, lower = x.l,
+#'                    upper = x.u, pstar = p_bar, starting.value = x.init)
 opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
   #Defining Objective Function
   eval_f <- function(x) {
