@@ -1,4 +1,22 @@
-opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
+#' Optimum intervention under the LAGO design
+#' @description The first goal of a Learn-As-You-Go (LAGO) study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The current LAGO design considers a logistic regression model with linear cost coefficients.
+#'  This function takes as input the vector of linear cost coefficients, the true/estimated beta values, the lower and upper limits for the components of the intervention package, the desired outcome goal and a starting value of the intervention package for the optimization algorithm and calculates the optimal intervention package.
+#'
+#' @param cost a vector of linear cost coefficients
+#' @param beta a vector of true/estimated beta values
+#' @param lower a vector providing the values of lower limits for the components of the intervention package
+#' @param upper a vector providing the values of upper limits for the components of the intervention package
+#' @param starting.value a vector of starting values for the components of the intervention package
+#' @param pstar the desired outcome goal
+#' @param intercept a logical argument to include intercept in the model or not (default = TRUE)
+#' @param eps the desired level of tolerance (default = 1.0e-7)
+#' @param max_eval the maximum number of iterations to perform (default = 3000)
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
   #Defining Objective Function
   eval_f <- function(x) {
     obj<- sum(cost * x) # Total cost of the intervention package
