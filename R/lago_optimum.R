@@ -12,7 +12,7 @@
 #' @param eps the desired level of tolerance (default = 1.0e-7)
 #' @param max_eval the maximum number of iterations to perform (default = 3000)
 #'
-#' @return
+#' @return The function returns a named list 'Optimum_Intervention' containing the value of the optimum intervention package and 'Obtained_p' containing the outcome goal under the optimal intervention package.
 #' @export
 #'
 #' @examples
@@ -31,6 +31,19 @@
 #' opt_lago = opt_int(cost = cost_lin, beta = beta, lower = x.l,
 #'                    upper = x.u, pstar = p_bar, starting.value = x.init)
 opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
+  # Checks
+  if(length(upper) != length(lower)) stop("lower and upper limits of the components are not at the same length")
+  if (any(lower < 0)) stop("The intervention must have non-negative values only")
+  if (any(lower >= upper)) stop("Upper limits of the intervention package must be larger than corresponding lower limits")
+  if(intercept == TRUE & length(beta) != (length(starting.value) + 1)){
+    stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
+  }
+  # Check whether the optimization can at all reach the outcome goal
+  cond1 <- expit(beta, lower, intercept) < pstar
+  cond2 <- expit(beta, upper, intercept) >= pstar
+  cond  <- cond1 & cond2
+  if(cond){
+
   #Defining Objective Function
   eval_f <- function(x) {
     obj<- sum(cost * x) # Total cost of the intervention package
@@ -64,7 +77,12 @@ opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept =
 
   # Optimization using non-linear optimization
   res <- nloptr::nloptr(x0 = x0, eval_f = eval_f, lb = lb, ub = ub, eval_g_ineq = eval_g_ineq, opts = opts)
-  optimum.intervention<-res$solution # Value of the optimal intervention package
+  optimum.intervention <- res$solution # Value of the optimal intervention package
   p.obt <- expit(beta, optimum.intervention, intercept) # Value of the obtained outcome goal under the optimal intervention package
+  }else{
+    warning("The desired outcome goal is not achievable. Returning the maxmimum intervention value")
+    optimum.intervention <- upper
+    p.obt <- expit(beta, optimum.intervention, intercept)
+  }
   return(list(Optimum_Intervention = optimum.intervention, Obtained_p = p.obt)) # Returning the optimal  intervention package and outcome goal attained under the optimal intervention package
 }
