@@ -1,5 +1,7 @@
 ---
 title: "logisticLAGO-vignette"
+author: "Arhit Chakrabarti"
+date: "November 23, 2021"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{logisticLAGO-vignette}
@@ -17,3 +19,20 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(logisticLAGO)
 ```
+
+# Introduction
+The U.S. Food and Drug Administration defines an adaptive design as \dots a clinical study design that allows for prospectively planned modifications based on accumulating study data without undermining the study’s integrity and validity" (*FDA, 2016*). Adaptive designs have been developed, studied and used in clinical trials for over a decade now. The "Learn-As-You-Go" (LAGO) (Nevo et. al. *Analysis of "Learn-As-You-Go" (LAGO) Studies*",  *The Annals of Statistics, 2021, 49(2):793-819.*) design is a novel design, motivated by large scale public health intervention trials, where participants receive a complex multi-component intervention package which may be for e.g. a treatment, a device, a new way to organize care or a combination thereof. The study is conducted in multiple stages. One of the goals of the study is to prospectively modify the intervention package at each stage to develop the optimal intervention package to be administered at the next stage. The data collected at each step is analyzed to reassess and thereby modify the intervention package to be rolled out at the next stage and thus, the LAGO design is an adaptive design. The first goal of a LAGO study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The second goal of the study is to assess the effectiveness of the intervention package on the desired response.
+
+## Methodology
+In this section, I present briefly the theoretical backdrop of the LAGO design that is used to develop the proposed R-package. The reader is referred to the original paper for a more comprehensive guide to the methodology of the LAGO design.
+
+The multivariate intervention package consists of p components. Let $X$ be the support of the intervention, that is, all possible intervention values. Let there be $\mathbf{K}$ stages in the study and at each stage $k$, a version of the intervention package is implemented in each of $J_k$ centers. Let $n_{jk}$ denote the sample size in the $j$-th center at stage $k$. 
+For stage 1, an initial $\mathbf{x}^{(1)}$ is chosen by the investigator based on their best judgement. The *actual intervention*, denoted by $\mathbf{A}$ received by any participant at any stage differs from the *recommended intervention* due to local constraints or other preferences. 
+It is assumed that the probability of success for a single unit *i* in a center *j* under intervention $\mathbf{A}=\mathbf{a}_j$,
+$$p_{a_j}(\beta) = Pr(Y_{ij} = 1| \mathbf{A} = \mathbf{a}_j,  \mathbf{X} = \mathbf{x}_j; \beta)$$
+does not depend on the recommended intervention $\mathbf{x}_j$ , except through the actual intervention $\mathbf{a}_j$, and follows a logistic regression model
+$$logit(p_{a_j}(\beta)) = \beta_0 + \beta_1 ^T \mathbf{a}_j$$
+where $\beta^T = (\beta_0, \beta_1 ^T)$ is a vector of unknown parameters such that $\beta_1$ describes the effects of the p intervention package components. It is further assumed that in each stage, conditionally on all $\mathbf{a}_j$, outcomes are independent within and between centers.
+
+A main goal of the LAGO design is to identify the optimal intervention package. Let $\tilde{p}$ be a pre-specified outcome probability goal and $C(\mathbf{x})$ be a known cost function. If $\beta$ were known, an optimal intervention for a center could be the solution to the center-specific optimization problem
+$$min_{\mathbf{x}_j} C(\mathbf{x}_j) \  \  \ \text{subject to}\ \   p_{x_j}(\beta) \geq \tilde{p} \ \ \& \ \  \mathbf{x}_j \in \mathbf{X}$$ 
