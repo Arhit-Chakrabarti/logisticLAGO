@@ -18,12 +18,12 @@
 #' @examples
 sc_lago <- function(x0, lower, upper, nstages, beta.true, sample.size, icc, cost.vec, prob, intercept = TRUE, B = 100){
   # Initializing objects for use in the simulation
-  response_clubbed <- NULL # Response
-  actual_intervention_clubbed <- NULL # Actual intervention
   xopt <- array(NA, dim = c(nstages, length(x0), B)) # Array to store the optimal intervention
   p.opt.hat <- matrix(NA, nrow = nstages, ncol = B) # Matrix to store the obtained outcome goal
   power <- rep(NA, times = B) # To store the power
   for(b in 1:B){
+    response_clubbed <- NULL # Response to be initialized as NULL at every simulation
+    actual_intervention_clubbed <- NULL # Actual intervention to be initialized as NULL at every simulation
     x.start = x0 # Initial value of x at each simulation
     for(k in 1:nstages){
       actual_intervention = jitter_my(x.start, n = sample.size, variation = icc)
