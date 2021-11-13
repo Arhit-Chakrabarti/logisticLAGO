@@ -2,7 +2,7 @@
 % Please edit documentation in R/single_center_lago.R
 \name{sc_lago}
 \alias{sc_lago}
-\title{Optimum package under the single center LAGO design}
+\title{Optimum interventions under the single center LAGO design}
 \usage{
 sc_lago(
   x0,
@@ -42,8 +42,21 @@ sc_lago(
 \item{B}{the number of simulations (default = 100)}
 }
 \value{
-
+This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' contains the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations. 'p.opt.hat' returns the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations.
 }
 \description{
-Optimum package under the single center LAGO design
+Optimum interventions under the single center LAGO design
+}
+\examples{
+x.init = c(2.5, 12.5, 7) # Initial value interventions
+x.l = c(1, 10, 2) # Lower limits for X
+x.u = c(4, 15, 15) # Lower limits for X
+n = 50 # Sample size
+K = 3 # Number of stages
+cost_lin = c(1, 8, 2.5) # Costs
+p_bar = 0.9 # Desired outcome goal
+beta = c(log(0.05), log(1.2), log(1.1), log(1.3)) # True beta values
+
+sim_sc <- sc_lago(x0 = x.init, lower = x.l, upper = x.u, nstages = K, beta.true = beta, sample.size = n, icc = 0.1, cost.vec = cost_lin, prob = p_bar, B = 100, intercept = TRUE)
+
 }
