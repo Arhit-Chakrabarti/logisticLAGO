@@ -81,7 +81,19 @@ opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept =
   p.obt <- expit(beta, optimum.intervention, intercept) # Value of the obtained outcome goal under the optimal intervention package
   }else{
     warning("The desired outcome goal is not achievable. Returning the maxmimum intervention value")
-    optimum.intervention <- upper
+    optimum.intervention <- rep(NA, length(x0)) # Initialize the optimum intervention
+    if(intercept == TRUE){
+      beta.without_intercept = beta[-1]
+    }else{
+      beta.without_intercept = beta
+    }
+    beta.effect = cost/beta.without_intercept # Calculating the value of the cost per unit beta
+    pos.eff = which(beta.effect > 0) # Which beta values are positive
+    neg.eff = which(beta.effect <= 0) # Which beta values are negative
+    # If any beta is positive assign the upper limit value as the optimal value
+    optimum.intervention[pos.eff] <- upper[pos.eff]
+    # If any beta is negative assign the lowest limit value as the optimal value
+    optimum.intervention[neg.eff] <- lower[neg.eff]
     p.obt <- expit(beta, optimum.intervention, intercept)
   }
   return(list(Optimum_Intervention = optimum.intervention, Obtained_p = p.obt)) # Returning the optimal  intervention package and outcome goal attained under the optimal intervention package
