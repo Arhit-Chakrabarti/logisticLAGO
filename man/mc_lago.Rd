@@ -53,7 +53,7 @@ This function takes as input several study design parameters of a multi-stage, m
 \examples{
 x.init = c(2.5, 12.5, 7) # Initial value interventions
 x.l = c(1, 10, 2) # Lower limits for X
-x.u = c(4, 15, 15) # Lower limits for X
+x.u = c(4, 15, 15) # Upper limits for X
 njk = 20 # Sample size per center per stage
 K = 3 # Number of stages
 J = 3 # Number of centers per stage

@@ -50,7 +50,7 @@ This function takes as input several study design parameters of a multi-stage, s
 \examples{
 x.init = c(2.5, 12.5, 7) # Initial value interventions
 x.l = c(1, 10, 2) # Lower limits for X
-x.u = c(4, 15, 15) # Lower limits for X
+x.u = c(4, 15, 15) # Upper limits for X
 n = 50 # Sample size
 K = 3 # Number of stages
 cost_lin = c(1, 8, 2.5) # Costs
