@@ -16,14 +16,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(logisticLAGO)
-```
+# Overview
+In this vignette, I will show how this package can be used to study design aspects or estimate intervention packages through simulations related to the LAGO design. I will briefly introduce the LAGO study, its goals and a brief section on the LAGO methodology, before moving on to the section on how to use this package. 
 
 # Introduction
-The U.S. Food and Drug Administration defines an adaptive design as \dots a clinical study design that allows for prospectively planned modifications based on accumulating study data without undermining the study’s integrity and validity" (*FDA, 2016*). Adaptive designs have been developed, studied and used in clinical trials for over a decade now. The "Learn-As-You-Go" (LAGO) (Nevo et. al. *Analysis of "Learn-As-You-Go" (LAGO) Studies*",  *The Annals of Statistics, 2021, 49(2):793-819.*) design is a novel design, motivated by large scale public health intervention trials, where participants receive a complex multi-component intervention package which may be for e.g. a treatment, a device, a new way to organize care or a combination thereof. The study is conducted in multiple stages. One of the goals of the study is to prospectively modify the intervention package at each stage to develop the optimal intervention package to be administered at the next stage. The data collected at each step is analyzed to reassess and thereby modify the intervention package to be rolled out at the next stage and thus, the LAGO design is an adaptive design. The first goal of a LAGO study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The second goal of the study is to assess the effectiveness of the intervention package on the desired response.
+The U.S. Food and Drug Administration defines an adaptive design as "\dots a clinical study design that allows for prospectively planned modifications based on accumulating study data without undermining the study’s integrity and validity" (*FDA, 2016*). Adaptive designs have been developed, studied and used in clinical trials for over a decade now. The "Learn-As-You-Go" (LAGO) (Nevo et. al. *Analysis of "Learn-As-You-Go" (LAGO) Studies*",  *The Annals of Statistics, 2021, 49(2):793-819.*) design is a novel design, motivated by large scale public health intervention trials, where participants receive a complex multi-component intervention package which may be for e.g. a treatment, a device, a new way to organize care or a combination thereof. The study is conducted in multiple stages. One of the goals of the study is to prospectively modify the intervention package at each stage to develop the optimal intervention package to be administered at the next stage. The data collected at each step is analyzed to reassess and thereby modify the intervention package to be rolled out at the next stage and thus, the LAGO design is an adaptive design. The first goal of a LAGO study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The second goal of the study is to assess the effectiveness of the intervention package on the desired response.
 
-## Methodology
+# Methodology
 In this section, I present briefly the theoretical backdrop of the LAGO design that is used to develop the proposed R-package. The reader is referred to the original paper for a more comprehensive guide to the methodology of the LAGO design.
 
 The multivariate intervention package consists of p components. Let $X$ be the support of the intervention, that is, all possible intervention values. Let there be $\mathbf{K}$ stages in the study and at each stage $k$, a version of the intervention package is implemented in each of $J_k$ centers. Let $n_{jk}$ denote the sample size in the $j$-th center at stage $k$. 
@@ -36,3 +35,40 @@ where $\beta^T = (\beta_0, \beta_1 ^T)$ is a vector of unknown parameters such t
 
 A main goal of the LAGO design is to identify the optimal intervention package. Let $\tilde{p}$ be a pre-specified outcome probability goal and $C(\mathbf{x})$ be a known cost function. If $\beta$ were known, an optimal intervention for a center could be the solution to the center-specific optimization problem
 $$min_{\mathbf{x}_j} C(\mathbf{x}_j) \  \  \ \text{subject to}\ \   p_{x_j}(\beta) \geq \tilde{p} \ \ \& \ \  \mathbf{x}_j \in \mathbf{X}$$ 
+However, as $\beta$ is almost always unknown, they are estimated from the data accumulated till any given stage and are used to solve the above stated optimization problem with the estimated $\hat{\beta}$ to obtain the estimated optimal intervention package. At any stage, since $\hat{\beta}$ depends on the data from the previous stage, and hence the estimated optimal intervention package depends on the data from previous stages and is hence random. The paper further develops the theoretical development of the optimization problem under the stated issue which I will not discuss here. For the problem of testing the effectiveness of the intervention package it has been shown that under some assumptions and regularity conditions, the estimated $\hat{\beta}$ is consistent and is asymptotically normally distributed. Thus the standard use of asymptotic Wald test for "*no-intervention*" effect is still valid under the LAGO design.
+
+```{r setup}
+library(logisticLAGO)
+```
+The first function in this package is the *expit* function which calculates the success probabilities for the logistic regression model for a given vector of covariates $x$ and a vector of parameter values $\beta$. The success probability is calculated as $\frac{1}{(1 + e^{-\beta'x})}$. If the lower and upper limits of the components of the intervention package are given by $x_l$ and $x_u$ then the success probabilities for a true $\beta_{*}$ are calculated as
+```{r, echo=TRUE}
+beta_true <- c(log(0.05), log(1.2), log(1.1), log(1.3))
+x.l <- c(1, 10, 2) # Lower limits for X
+x.u <- c(4, 15, 15) # Upper limits for X
+prob_lower <- expit(beta = beta_true, x = x.l)
+prob_upper <- expit(beta = beta_true, x = x.u)
+```
+If the desired outcome goal $\tilde{p}$ lies between the the probabilities i.e. the probabilities corresponding to  $x_l$ and $x_u$, only then it is reasonable to expect that the LAGO optimization would yield an optimal intervention which attains the desired success goal, while minimizing the cost.
+
+At any stage of the study, once the data is available on the actual intervention received by the participants and their binary responses, they maybe used to estimate the parameters $\hat{\beta}$ using the accumulated data. The estimates $\hat{\beta}$, the intervention package rolled out at that stage $x$, along with information on their unit costs, upper and lower limits for the components of the intervention package may be used to estimate the optimal inetrvention package to be used in the next stage. 
+```{r, echo=TRUE}
+beta_est <- c(0.13507022,  0.18982563,  0.09896484, 0.17729120)
+x.l <- c(1, 10, 2) # Lower limits for X
+x.u <- c(4, 15, 15) # Upper limits for X
+x.start <- c(2.5, 12.5, 7)
+
+cost_lin = c(1, 8, 2.5)
+p_bar = 0.85 # Defining the desired outcome goal
+## Running the LAGO optimization algorithm
+opt_lago = opt_int(cost = cost_lin, beta = beta_est, lower = x.l,
+                   upper = x.u, pstar = p_bar, starting.value = x.start)
+
+
+
+```
+The results from the optimization are summarized in the table below, which gives the estimated optimal intervention package and the success probabilities under the estimated optimal intervention package.
+```{r, echo=FALSE}
+opt.x <- matrix(c(opt_lago$Optimum_Intervention, opt_lago$Obtained_p), nrow = 1)
+colnames(opt.x) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$")
+knitr::kable(opt.x, format = "html", digits = 3, caption = "Results")  
+```
