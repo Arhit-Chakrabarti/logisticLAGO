@@ -11,7 +11,7 @@ You can install logisticLAGO from GitHub with:
 
 ```{r}
 # install.packages("devtools")
-# devtools::install_github("nsgrantham/ggdark")
+# devtools::install_github("Arhit-Chakrabarti/logisticLAGO")
 ```
 
 ## Description
