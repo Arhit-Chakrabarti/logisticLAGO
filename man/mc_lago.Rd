@@ -34,7 +34,7 @@ mc_lago(
 
 \item{sample.size}{sample size (n) in each center of each of the K stages}
 
-\item{icc}{the expected variation among subjects within and between the center at any stage}
+\item{icc}{the expected variation among subjects within and between the centers at any stage}
 
 \item{cost.vec}{a vector of per unit linear cost coefficients}
 
@@ -48,7 +48,7 @@ mc_lago(
 This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' contains the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations. 'p.opt.hat' returns the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations.
 }
 \description{
-Optimum interventions under the multi center LAGO design
+This function takes as input several study design parameters of a multi-stage, multi-center per stage LAGO design and provides the estimated optimal intervention package through simulations. For simplicity, this function assumes an equal number of centers per stage and equal number of samples per center in each stage. The required parameters that need to be supplied to the function are an initial starting intervention package which is optimized over the stages, the lower and upper limits for the components of the intervention package, the true or best guess beta values, number of stages K, number of centers per stage J, sample size per center per stage n, the unit costs for the intervention package components and the desired outcome goal for the LAGO study. Since this function returns the estimated optimal interventions through simulations, this function also needs as input the expected variation among the subjects within and between the centers at any stage.
 }
 \examples{
 x.init = c(2.5, 12.5, 7) # Initial value interventions
@@ -60,8 +60,13 @@ J = 3 # Number of centers per stage
 njk = 3 # Number of centers per stage
 cost_lin = c(1, 8, 2.5) # Costs
 p_bar = 0.9 # Desired outcome goal
-beta = c(log(0.05), log(1.2), log(1.1), log(1.3)) # True beta values
+# True/best guess beta values
+beta = c(log(0.05), log(1.2), log(1.1), log(1.3))
 
-sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u, beta.true = beta, nstages = K, centers = J, sample.size = njk, icc = 0.1, prob = p_bar, cost.vec = cost_lin)
+sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u,
+                  beta.true = beta, nstages = K,
+                  centers = J, sample.size = njk,
+                  icc = 0.1, prob = p_bar,
+                  cost.vec = cost_lin)
 
 }
