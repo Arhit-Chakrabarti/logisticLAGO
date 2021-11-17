@@ -45,7 +45,7 @@ sc_lago(
 This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' contains the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations. 'p.opt.hat' returns the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations.
 }
 \description{
-Optimum interventions under the single center LAGO design
+This function takes as input several study design parameters of a multi-stage, single center per stage LAGO design and provides the estimated optimal intervention package through simulations. The required parameters that need to be supplied to the function are an initial starting intervention package which is optimized over the stages, the lower and upper limits for the components of the intervention package, the true or best guess beta values, number of stages K, sample size per stage n, the unit costs for the intervention package components and the desired outcome goal for the LAGO study. Since this function returns the estimated optimal interventions through simulations, this function also needs as input the expected variation among the subjects within the center at any stage.
 }
 \examples{
 x.init = c(2.5, 12.5, 7) # Initial value interventions
@@ -55,8 +55,13 @@ n = 50 # Sample size
 K = 3 # Number of stages
 cost_lin = c(1, 8, 2.5) # Costs
 p_bar = 0.9 # Desired outcome goal
-beta = c(log(0.05), log(1.2), log(1.1), log(1.3)) # True beta values
+# True/best guess beta values
+beta = c(log(0.05), log(1.2), log(1.1), log(1.3))
 
-sim_sc <- sc_lago(x0 = x.init, lower = x.l, upper = x.u, nstages = K, beta.true = beta, sample.size = n, icc = 0.1, cost.vec = cost_lin, prob = p_bar, B = 100, intercept = TRUE)
+sim_sc <- sc_lago(x0 = x.init, lower = x.l, upper = x.u,
+                  nstages = K, beta.true = beta,
+                  sample.size = n, icc = 0.1,
+                  cost.vec = cost_lin, prob = p_bar,
+                  B = 100, intercept = TRUE)
 
 }
