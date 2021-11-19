@@ -102,3 +102,8 @@ function is:
 ``` r
 sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u, beta.true = beta, nstages = K, centers = J, sample.size = njk, icc = 0.1, prob = p_bar, cost.vec = cost_lin)
 ```
+
+## Details
+
+For more information on logisticLAGO Package, please access the package
+documentations or vignettes. Please feel free to contact the author.
