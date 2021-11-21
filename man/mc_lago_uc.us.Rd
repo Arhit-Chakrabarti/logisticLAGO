@@ -54,5 +54,23 @@ This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' con
 This function takes as input several study design parameters of a multi-stage, multi-center per stage LAGO design and provides the estimated optimal intervention package through simulations. This function considers user supplied number of centers per stage and a user supplied number of samples per center in each stage. The required parameters that need to be supplied to the function are an initial starting intervention package which is optimized over the stages, the lower and upper limits for the components of the intervention package, the true or best guess beta values, number of stages K, number of centers per stage J, sample size per center per stage n, the unit costs for the intervention package components and the desired outcome goal for the LAGO study. Since this function returns the estimated optimal interventions through simulations, this function also needs as input the expected variation among subjects within each centers at any stage and the expected variation between the centers at any stage while implementing the intervention package.
 }
 \examples{
+x.init = c(2.5, 12.5, 7) # Initial value interventions
+x.l = c(1, 10, 2) # Lower limits for X
+x.u = c(4, 15, 15) # Upper limits for X
+njk = list() # Initialize sample size per center at each stage
+njk[[1]] = 20 # Sample size per center at stage 1 is 20
+njk[[2]] = 25 # Sample size per center at stage 2 is 25
+njk[[3]] = 30 # Sample size per center at stage 3 is 30
+K = 3 # Number of stages
+J = c(3, 5, 10) # Number of centers per stage
+cost_lin = c(1, 8, 2.5) # Costs
+p_bar = 0.9 # Desired outcome goal
+# True/best guess beta values
+beta.vec = c(log(0.05), log(1.1), log(1.35), log(1.2))
 
+sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
+                upper = x.u, nstages = K, centers = J,
+                sample.size = njk, cost.vec = cost_lin,
+                prob = p_bar, beta.true = beta.vec,
+                icc = 0.1, bcc = 0.15)
 }
