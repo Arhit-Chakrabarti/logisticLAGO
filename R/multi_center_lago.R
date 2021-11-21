@@ -23,7 +23,6 @@
 #' njk = 20 # Sample size per center per stage
 #' K = 3 # Number of stages
 #' J = 3 # Number of centers per stage
-#' njk = 3 # Number of centers per stage
 #' cost_lin = c(1, 8, 2.5) # Costs
 #' p_bar = 0.9 # Desired outcome goal
 #' # True/best guess beta values
