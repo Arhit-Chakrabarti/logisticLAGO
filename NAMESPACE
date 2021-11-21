@@ -3,5 +3,6 @@
 export(expit)
 export(mc_lago)
 export(mc_lago_uc)
+export(mc_lago_uc.us)
 export(opt_int)
 export(sc_lago)
