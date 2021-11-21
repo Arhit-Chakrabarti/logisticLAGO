@@ -51,5 +51,24 @@ mc_lago_uc(
 This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' contains the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations. 'p.opt.hat' returns the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations.
 }
 \description{
-Optimum interventions under the multi center LAGO design with unequal centers per stage
+This function takes as input several study design parameters of a multi-stage, multi-center per stage LAGO design and provides the estimated optimal intervention package through simulations. This function considers user supplied number of centers per stage, however, considers an equal number of samples per center in each stage. The required parameters that need to be supplied to the function are an initial starting intervention package which is optimized over the stages, the lower and upper limits for the components of the intervention package, the true or best guess beta values, number of stages K, number of centers per stage J, sample size per center per stage n, the unit costs for the intervention package components and the desired outcome goal for the LAGO study. Since this function returns the estimated optimal interventions through simulations, this function also needs as input the expected variation among subjects within each centers at any stage and the expected variation between the centers at any stage while implementing the intervention package.
+}
+\examples{
+x.init = c(2.5, 12.5, 7) # Initial value interventions
+x.l = c(1, 10, 2) # Lower limits for X
+x.u = c(4, 15, 15) # Upper limits for X
+njk = 20 # Sample size per center per stage
+K = 3 # Number of stages
+J = c(3, 5, 10) # Number of centers per stage
+cost_lin = c(1, 8, 2.5) # Costs
+p_bar = 0.9 # Desired outcome goal
+# True/best guess beta values
+beta.vec = c(log(0.05), log(1.1), log(1.35), log(1.2))
+
+sim_mc_uc <- mc_lago_uc(x0 = x.init, lower = x.l,
+             upper = x.u, nstages = K, centers = J,
+             sample.size = njk, cost.vec = cost_lin,
+             prob = p_bar, beta.true = beta.vec,
+             icc = 0.1, bcc = 0.15)
+
 }
