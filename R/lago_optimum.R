@@ -38,11 +38,6 @@ opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept =
   if(intercept == TRUE & length(beta) != (length(starting.value) + 1)){
     stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
   }
-  # Check whether the optimization can at all reach the outcome goal
-  cond1 <- expit(beta, lower, intercept) < pstar
-  cond2 <- expit(beta, upper, intercept) >= pstar
-  cond  <- cond1 & cond2
-  if(cond){
 
   #Defining Objective Function
   eval_f <- function(x) {
@@ -79,22 +74,6 @@ opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept =
   res <- nloptr::nloptr(x0 = x0, eval_f = eval_f, lb = lb, ub = ub, eval_g_ineq = eval_g_ineq, opts = opts)
   optimum.intervention <- res$solution # Value of the optimal intervention package
   p.obt <- expit(beta, optimum.intervention, intercept) # Value of the obtained outcome goal under the optimal intervention package
-  }else{
-    warning("The desired outcome goal is not achievable. Returning the maxmimum intervention value")
-    optimum.intervention <- rep(NA, length(starting.value)) # Initialize the optimum intervention
-    if(intercept == TRUE){
-      beta.without_intercept = beta[-1]
-    }else{
-      beta.without_intercept = beta
-    }
-    beta.effect = cost/beta.without_intercept # Calculating the value of the cost per unit beta
-    pos.eff = which(beta.effect > 0) # Which beta values are positive
-    neg.eff = which(beta.effect <= 0) # Which beta values are negative
-    # If any beta is positive assign the upper limit value as the optimal value
-    optimum.intervention[pos.eff] <- upper[pos.eff]
-    # If any beta is negative assign the lowest limit value as the optimal value
-    optimum.intervention[neg.eff] <- lower[neg.eff]
-    p.obt <- expit(beta, optimum.intervention, intercept)
-  }
+
   return(list(Optimum_Intervention = optimum.intervention, Obtained_p = p.obt)) # Returning the optimal  intervention package and outcome goal attained under the optimal intervention package
 }
