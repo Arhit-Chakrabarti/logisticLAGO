@@ -146,7 +146,7 @@ The stage wise results from the optimization are as below
 ```{r, echo=FALSE}
 results1 <- data.frame(sim_sc$xopt, sim_sc$p.opt.hat, c(sim_sc$power, "", ""))
 colnames(results1) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
-knitr::kable(results1, format = "html", digits = 3, caption = "Table 2")  
+knitr::kable(results1, format = "html", digits = 3, caption = "Table 3")  
 ```
 ### Multi-center LAGO design 
 The multi-center LAGO design extends the idea of the single center LAGO study to the case where the study is conducted in multiple centers or locations and pools the data together at each stage before proceeding with the optimization.
@@ -176,7 +176,7 @@ The stage wise results from the multi-center LAGO optimization are as below
 ```{r, echo=FALSE}
 results2 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
 colnames(results2) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
-knitr::kable(results2, format = "html", digits = 3, caption = "Table 3")  
+knitr::kable(results2, format = "html", digits = 3, caption = "Table 4")  
 ```
 
 #### Multi-center LAGO with unequal number of centers per stage and equal sample size in each center
@@ -195,7 +195,7 @@ The results of which are shown below
 ```{r, echo=FALSE}
 results3 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
 colnames(results3) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
-knitr::kable(results3, format = "html", digits = 3, caption = "Table 4")  
+knitr::kable(results3, format = "html", digits = 3, caption = "Table 5")  
 ```
 
 #### Multi-center LAGO with unequal number of centers per stage and unequal sample size in each center
@@ -221,4 +221,4 @@ The results are summarized below.
 ```{r, echo=FALSE}
 results4 <- data.frame(sim_mc_uc.us$xopt, sim_mc_uc.us$p.opt.hat, c(round(sim_mc_uc.us$power, 2), "", ""))
 colnames(results4) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
-knitr::kable(results4, format = "html", digits = 3, caption = "Table 5")  
+knitr::kable(results4, format = "html", digits = 3, caption = "Table 6")  
