@@ -67,10 +67,10 @@ mc_lago <- function(x0, lower, upper, nstages, centers, beta.true, sample.size, 
         response_clubbed <- c(response_clubbed, response)
         if(intercept == TRUE){
           # If there is intercept in the model, fit the model with the intercept term
-          fit <- stats::glm(response_clubbed ~ actual_intervention_clubbed, family = "binomial")
+          fit <- suppressWarnings(stats::glm(response_clubbed ~ actual_intervention_clubbed, family = "binomial"))
         }else{
           # If there is no intercept in the model, fit the model without the intercept term
-          fit <- stats::glm(response_clubbed ~ actual_intervention_clubbed - 1, family = "binomial")
+          fit <- suppressWarnings(stats::glm(response_clubbed ~ actual_intervention_clubbed - 1, family = "binomial"))
         }
         # Getting the beta estimates
         beta_hat = unname(fit$coefficients)
