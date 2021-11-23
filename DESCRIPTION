@@ -1,8 +1,7 @@
 Package: logisticLAGO
 Type: Package
 Title: Learn-As-You-Go study with a single constraint and binary response
-Version: 0.0.0.9000
-Date: 2021-11-7
+Version: 1.0.0.000
 Authors@R: 
     person("Arhit", "Chakrabarti", , "arhit.chakrabarti@stat.tamu.edu", role = c("aut", "cre"))
 Description: This R-package implements the LAGO optimization to estimate the optimal intervention package with the given data at any stage. The package also includes functions which would estimate the optimal intervention package through simulations, given the various study parameters under a single center or multi-center design, for the uncontrolled LAGO study. These optimal intervention packages may be used as a starting point of a new study and maybe prospectively changed as the data from the study is gathered and analyzed. The functions also consider the power of the test for no-intervention effect under the various study setups through simulations.
