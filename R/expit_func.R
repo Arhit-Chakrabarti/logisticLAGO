@@ -1,6 +1,6 @@
 #' Success probabilities under the logistic regression model
-#' @description This function calculates the success probabilities for the logistic regression model for a given vector of covariates and a vector of parameter values. The success probability for a given vector of covariates x and paramter vector beta is calculated as 1/(1 + exp(-\$beta$' X))
-#' @param beta a vector of true/estimated vector of parameters for the logistic regression model. If intercept = TRUE is specified, the first component should include the value of the intercept term
+#' @description This function calculates the success probabilities for the logistic regression model for a given vector of covariates and a vector of parameter values. The success probability for a given vector of covariates x and paramter vector beta is calculated as 1/(1 + exp(-beta' X))
+#' @param beta a vector of true/estimated values of the parameters for a logistic regression model. If intercept = TRUE is specified, the first component should include the value of the intercept term
 #' @param x a vector of covariates under the logistic regression model
 #' @param intercept a logical argument to specify if the intercept term is included in the model or not. If TRUE, then beta should include the intercept term (default = TRUE)
 #'
