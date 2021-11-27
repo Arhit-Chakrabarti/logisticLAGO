@@ -5,10 +5,10 @@ Arhit Chakrabarti
 -   [Description](#description)
 -   [Installation](#installation)
 -   [Usage](#usage)
-    -   [In a ongoing trial](#in-a-ongoing-trial)
+    -   [In an ongoing trial](#in-an-ongoing-trial)
     -   [Before starting a trial](#before-starting-a-trial)
         -   [Single center LAGO design](#single-center-lago-design)
-        -   [Multi-center LAGO design](#multi-center-lago-design)
+        -   [Multi center LAGO design](#multi-center-lago-design)
             -   [Equal number of centers per stage and equal sample size
                 in each
                 center](#equal-number-of-centers-per-stage-and-equal-sample-size-in-each-center)
@@ -56,26 +56,26 @@ continuous intervention package and a binary response variable which may
 be for example, how well the participants perform on a test following
 administration of the intervention package. The intervention package is
 prospectively changed at every stage based on the cumulative data
-collected over the stages, such that an *optimal* package is rolled out
-to the participants in the next stage such that the probability of
-success for the binary response is above a desired threshold while
+collected over the stages and an *optimal* package is rolled out to the
+participants in the next stage such that the probability of success for
+the binary response is above a desired threshold, while simultaneously
 minimizing the implementation costs.
 
-## In a ongoing trial
+## In an ongoing trial
 
 In the case when a trial has already been designed and data from the
 trial has been collected, the next step of the study is to estimate the
-optimal intervention package to be rolled out to the participants in the
-next stage such that the otcome goal of the study is met and costs
-minimized. To estimate the optimal intervention package the vector of
-per unit linear costs for the intervention package (*cost*), the vector
-of minimum (*lower*) and maximum (*upper*) values of the components of
-the intervention package, desired outcome goal (*pstar*), the estimated
-*β̂* (*beta*) from fitting a logistic regression model to the observed
-response, which gives the estimated effect of the corresponding
-intervention package and the intervention package rolled out at the
-current stage (*starting.value*). The estimated optimal intervention is
-given by
+optimum intervention package to be rolled out to the participants in the
+next stage such that the outcome goal of the study is met and costs
+minimized. To estimate the optimum intervention package, the vector of
+per unit costs for the components of the intervention package (*cost*),
+the vector of minimum (*lower*) and maximum (*upper*) values of the
+components of the intervention package, desired outcome goal (*pstar*),
+the estimated *β̂* (*beta*) from fitting a logistic regression model to
+the observed response, which gives the estimated effect of the
+corresponding intervention package and the intervention package rolled
+out at the current stage (*starting.value*) are required. The estimated
+optimal intervention is given by the function *opt\_int*
 
 ``` r
 opt_int(cost = cost, beta = beta, lower = lower, upper = upper, pstar = pstar, starting.value = starting.value)
@@ -92,7 +92,7 @@ response. Initial package and idea about the effects of the components
 of the intervention package may be obtained from an investigator or from
 knowledge of prior or concurrent intervention trials. The simplest case
 is when the trial is designed to be conducted in a single center or
-location. The number of stages (*nsatges*) in the LAGO design, sample
+location. The number of stages (*nstages*) in the LAGO design, sample
 size per stage (*sample.size*), the unit costs for the intervention
 package components (*cost.vec*), the vector of minimum (*lower*) and
 maximum (*upper*) values of the components of the intervention package,
@@ -108,7 +108,7 @@ done using the following function:
 sc_lago(x0 = x0, lower = lower, upper = upper, nstages = nstages, beta.true = beta.true, sample.size = sample.size, icc = icc, cost.vec = cost.vec, prob = prob)
 ```
 
-### Multi-center LAGO design
+### Multi center LAGO design
 
 #### Equal number of centers per stage and equal sample size in each center
 
@@ -139,7 +139,7 @@ mc_lago_uc(x0 = x0, lower = lower, upper = upper, beta.true = beta.true, nstages
 ```
 
 Here the function argument *icc* denotes the expected variation among
-subjects within each centers at any stage and the argument *bcc* denotes
+subjects within each center at any stage and the argument *bcc* denotes
 the expected variation between the centers at any stage while
 implementing the intervention package. Thus, this function separates the
 between center and within center variability, while generating the data
@@ -149,11 +149,11 @@ for simulations.
 
 The traditional design under multi-center LAGO study is considering
 different number of centers in each stage as well as different sample
-size in each center of any given stage. This design naturally arises, as
-it is intuitive to have both small number of centers and small sample
-size at each center at the beginning of the stuy and progressively
-increase the number of centers and sample size as the study progresses.
-The corresponding function is:
+sizes in each center of any given stage. This design arises quite
+naturally, as it is intuitive to have both small number of centers and
+small sample size at each center at the beginning of the study and
+progressively increase the number of centers and sample size as the
+study progresses. The corresponding function is:
 
 ``` r
 mc_lago_uc.us(x0 = x0, lower = lower, upper = upper, beta.true = beta.true, nstages = nstages, centers = centers, sample.size = sample.size, cost.vec = cost.vec, prob = prob, icc = icc, bcc = bcc)
