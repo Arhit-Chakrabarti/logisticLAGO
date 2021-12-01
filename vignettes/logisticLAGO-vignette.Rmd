@@ -16,15 +16,15 @@ knitr::opts_chunk$set(
 ```
 
 # Overview
-In this vignette, I will show how this package can be used to study design aspects or estimate intervention packages through simulations related to the LAGO design. I will briefly introduce the LAGO study, its goals and a brief section on the LAGO methodology, before moving on to the section on how to use this package. 
+In this vignette, I will show how this package can be used to study the design aspects or estimate '*optimal*' intervention packages through simulations related to the LAGO design. I will briefly introduce the LAGO study, its goals and a brief section on the LAGO methodology, before moving on to the section on how to use this package. 
 
 # Introduction
-The U.S. Food and Drug Administration defines an adaptive design as "\dots a clinical study design that allows for prospectively planned modifications based on accumulating study data without undermining the study’s integrity and validity" (*FDA, 2016*). Adaptive designs have been developed, studied and used in clinical trials for over a decade now. The "Learn-As-You-Go" (LAGO) (Nevo et. al. *Analysis of "Learn-As-You-Go" (LAGO) Studies*",  *The Annals of Statistics, 2021, 49(2):793-819.*) design is a novel design, motivated by large scale public health intervention trials, where participants receive a complex multi-component intervention package which may be for e.g. a treatment, a device, a new way to organize care or a combination thereof. The study is conducted in multiple stages. One of the goals of the study is to prospectively modify the intervention package at each stage to develop the optimal intervention package to be administered at the next stage. The data collected at each step is analyzed to reassess and thereby modify the intervention package to be rolled out at the next stage and thus, the LAGO design is an adaptive design. The first goal of a LAGO study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The second goal of the study is to assess the effectiveness of the intervention package on the desired response.
+The U.S. Food and Drug Administration defines an adaptive design as "$\dots$ a clinical study design that allows for prospectively planned modifications based on accumulating study data without undermining the study’s integrity and validity" (*FDA, 2016*). Adaptive designs have been developed, studied and used in clinical trials for over a decade now. The "Learn-As-You-Go" (LAGO) (Nevo et. al. *Analysis of "Learn-As-You-Go" (LAGO) Studies*",  *The Annals of Statistics, 2021, 49(2):793-819.*) design is a novel design, motivated by large scale public health intervention trials, where participants receive a complex multi-component intervention package which may be for e.g. a treatment, a device, a new way to organize care or a combination thereof. The study is conducted in multiple stages. One of the goals of the study is to prospectively modify the intervention package at each stage to develop the optimal intervention package to be administered at the next stage. The data collected at each step is analyzed to reassess and thereby modify the intervention package to be rolled out at the next stage and thus, the LAGO design is an adaptive design. The first goal of a LAGO study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The second goal of the study is to assess the effectiveness of the intervention package on the desired response.
 
 # Methodology
 In this section, I present briefly the theoretical backdrop of the LAGO design that is used to develop the proposed R-package. The reader is referred to the original paper for a more comprehensive guide to the methodology of the LAGO design.
 
-The multivariate intervention package consists of p components. Let $X$ be the support of the intervention, that is, all possible intervention values. Let there be $\mathbf{K}$ stages in the study and at each stage $k$, a version of the intervention package is implemented in each of $J_k$ centers. Let $n_{jk}$ denote the sample size in the $j$-th center at stage $k$. 
+The multivariate intervention package consists of $p$ components. Let $X$ be the support of the intervention, that is, all possible intervention values. Let there be $\mathbf{K}$ stages in the study and at each stage $k$, a version of the intervention package is implemented in each of $J_k$ centers. Let $n_{jk}$ denote the sample size in the $j$-th center at stage $k$. 
 For stage 1, an initial $\mathbf{x}^{(1)}$ is chosen by the investigator based on their best judgement. The *actual intervention*, denoted by $\mathbf{A}$ received by any participant at any stage differs from the *recommended intervention* due to local constraints or other preferences. 
 It is assumed that the probability of success for a single unit *i* in a center *j* under intervention $\mathbf{A}=\mathbf{a}_j$,
 $$p_{a_j}(\beta) = Pr(Y_{ij} = 1| \mathbf{A} = \mathbf{a}_j,  \mathbf{X} = \mathbf{x}_j; \beta)$$
@@ -57,7 +57,7 @@ knitr::kable(matrix(c(prob_lower, prob_upper), nrow = 1), format = "html", digit
 ```
 If the desired outcome goal $\tilde{p}$ lies between the the probabilities i.e. the probabilities corresponding to  $x_l$ and $x_u$, only then it is reasonable to expect that the LAGO optimization would yield an optimal intervention which attains the desired success goal, while minimizing the cost.
 
-The *logisticLAGO** package can be used in two different settings, namely in a situation where a LAGO trial is ongoing and with the data being collected at any stage, the estimated optimal intervention package to be implemented in the next stage is desired and also in a situation before the starting of a LAGO study, where an idea about the optimal intervention package is desired. The two situations are considered separately over here.
+The *logisticLAGO* package can be used in two different settings, namely in a situation where a LAGO trial is ongoing and with the data being collected at any stage, the estimated optimal intervention package to be implemented in the next stage is desired and also in a situation before the starting of a LAGO study, where an idea about the optimal intervention package is desired. The two situations are considered separately over here.
 
 ## In an ongoing LAGO study
 At any stage of the study, once the data is available on the actual intervention received by the participants and their binary responses, they maybe used to estimate the parameters $\hat{\beta}$ using the accumulated data. The estimates $\hat{\beta}$, the intervention package rolled out at that stage $x$, along with information on their unit costs, upper and lower limits for the components of the intervention package may be used to estimate the optimal inetrvention package to be used in the next stage. 
@@ -122,7 +122,7 @@ knitr::kable(opt.x, format = "html", digits = 3, caption = "Table 2")
 The main purpose of this package is to consider the situation before starting of a LAGO study, wherein an investigator may be interested to know how the study would progress given the parameters of the trial. These parameters maybe obtained from historical or concurrent trials or maybe based on the best judgment of a subject matter expert. This package considers several LAGO designs including a single center design and multi-center design.
 
 ### Single center LAGO design
-The simplest case is when the trial is designed to be conducted in a single center or location and is conducted over multiple stages. The number of stages (*nsatges*) in the LAGO design, sample size per stage (*sample.size*), the unit costs for the intervention package components (*cost.vec*), the vector of minimum (*lower*) and maximum (*upper*) values of the components of the intervention package, desired outcome goal (*prob*), the best guess intervention effect (*beta.true*) and the initial value of intervention package (*x0*) along with the expected variation in rolling out the intervention package (*icc*) are used to simulate the estimated intervention package over the different stages, the estimated outcome goal and the estimated power of the test of "*no-intervention*" effect at the end of the study.
+The simplest case is when the trial is designed to be conducted in a single center or location and is conducted over multiple stages. The number of stages (*nstages*) in the LAGO design, sample size per stage (*sample.size*), the unit costs for the intervention package components (*cost.vec*), the vector of minimum (*lower*) and maximum (*upper*) values of the components of the intervention package, desired outcome goal (*prob*), the best guess intervention effect (*beta.true*) and the initial value of intervention package (*x0*) along with the expected variation in rolling out the intervention package (*icc*) are used to simulate the estimated intervention package over the different stages, the estimated outcome goal and the estimated power of the test of "*no-intervention*" effect at the end of the study.
 
 ```{r, echo = TRUE}
 x.init = c(2.5, 12.5, 7) # Initial value interventions
@@ -144,7 +144,9 @@ sim_sc <- sc_lago(x0 = x.init, lower = x.l, upper = x.u,
 The stage wise results from the optimization are as below
 ```{r, echo=FALSE}
 results1 <- data.frame(sim_sc$xopt, sim_sc$p.opt.hat, c(sim_sc$power, "", ""))
-colnames(results1) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+results1 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results1)
+rownames(results1) <- NULL
+colnames(results1) <- c("Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
 knitr::kable(results1, format = "html", digits = 3, caption = "Table 3")  
 ```
 ### Multi-center LAGO design 
@@ -174,7 +176,9 @@ sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u,
 The stage wise results from the multi-center LAGO optimization are as below
 ```{r, echo=FALSE}
 results2 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
-colnames(results2) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+results2 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results2)
+rownames(results2) <- NULL
+colnames(results2) <- c("Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
 knitr::kable(results2, format = "html", digits = 3, caption = "Table 4")  
 ```
 
@@ -193,7 +197,9 @@ sim_mc_uc <- mc_lago_uc(x0 = x.init, lower = x.l,
 The results of which are shown below
 ```{r, echo=FALSE}
 results3 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
-colnames(results3) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+results3 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results3)
+rownames(results3) <- NULL
+colnames(results3) <- c("Stage","$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
 knitr::kable(results3, format = "html", digits = 3, caption = "Table 5")  
 ```
 
@@ -219,5 +225,73 @@ sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
 The results are summarized below.
 ```{r, echo=FALSE}
 results4 <- data.frame(sim_mc_uc.us$xopt, sim_mc_uc.us$p.opt.hat, c(round(sim_mc_uc.us$power, 2), "", ""))
-colnames(results4) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+results4 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results4)
+rownames(results4) <- NULL
+colnames(results4) <- c("Stage","$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
 knitr::kable(results4, format = "html", digits = 3, caption = "Table 6")  
+```
+
+As a comparison of how the three methods compare, the results from the three different multi-center LAGO designs are summarized and for comparison they are based on the same total sample size. All other parameters remain the same as before except number of centers per stage and the sample size per center.
+
+1. For the multi-center design with equal number of centers and equal sample size per center, we take sample size of 50 in each of the 3 centers per stage.
+2. For the multi-center design with unequal number of centers in each stage with equal sample size per center, we take sample size of 25. The number of centers are
+   * 3 in stage 1
+   * 5 in stage 2
+   * 10 in stage 3
+2. For the multi-center design with both unequal number of centers in each stage and unequal sample size per center, we take the number of centers to be the same as above, but the sample size in each of the centers in the three stages as
+   * 15 in stage 1
+   * 21 in stage 2
+   * 30 in stage 3 
+
+```{r, echo = FALSE}
+njk = 50
+sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u,
+                   beta.true = beta, nstages = K,
+                   centers = J, sample.size = njk,
+                   icc = 0.1, prob = p_bar,
+                   cost.vec = cost_lin)
+
+njk = 25
+J_uc = c(3, 5, 10) # Number of centers per stage
+# Running the Multi-center LAGO simulation study
+sim_mc_uc <- mc_lago_uc(x0 = x.init, lower = x.l,
+              upper = x.u, nstages = K, centers = J_uc,
+              sample.size = njk, cost.vec = cost_lin,
+              prob = p_bar, beta.true = beta,
+              icc = 0.1, bcc = 0.15)
+
+J_uc = c(3, 5, 10)
+sample_size = list() # Initialize sample size per center at each stage
+sample_size[[1]] = 15 # Sample size per center at stage 1 is 20
+sample_size[[2]] = 21 # Sample size per center at stage 2 is 25
+sample_size[[3]] = 30 # Sample size per center at stage 3 is 30
+# Running the Multi-center LAGO simulation study
+sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
+                 upper = x.u, nstages = K, centers = J_uc,
+                 sample.size = sample_size, cost.vec = cost_lin,
+                 prob = p_bar, beta.true = beta,
+                 icc = 0.1, bcc = 0.15)
+
+```
+
+The results are summmarized as below:
+```{r, echo=FALSE}
+results5 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
+colnames(results5) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+results6 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
+colnames(results6) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+results7 <- data.frame(sim_mc_uc.us$xopt, sim_mc_uc.us$p.opt.hat, c(round(sim_mc_uc.us$power, 2), "", ""))
+colnames(results7) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+result = rbind(results5, results6, results7)
+rownames(result) = NULL
+result_full = cbind(c("Equal number of centers and samples", "", "", "Only uequal number of centers", "", "", "Unequal number of centers and samples", "", ""),
+                    rep(c("Stage 1", "Stage 2", "Stage 3"), 3), 
+                    result)
+colnames(result_full) = c("Case"," Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+
+knitr::kable(result_full, format = "html", digits = 3, caption = "Table of comparisons for the different multi-center LAGO designs")  
+```
+
+# Details
+
+For more information on logisticLAGO Package, please access the package documentations. Please feel free to contact the author.
