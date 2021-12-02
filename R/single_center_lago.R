@@ -12,7 +12,9 @@
 #' @param intercept a logical argument to include intercept in the model or not (default = TRUE)
 #' @param B the number of simulations (default = 100)
 #'
-#' @return This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' contains the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations. 'p.opt.hat' returns the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations.
+#' @return The returned value is a named list containing
+#' \item{xopt}{a dataframe containing the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations}
+#' \item{p.opt.hat}{a vector containing the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations}
 #' @export
 #'
 #' @examples

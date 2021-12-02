@@ -48,7 +48,10 @@ mc_lago_uc.us(
 \item{B}{the number of simulations (default = 100)}
 }
 \value{
-This function returns a named list containing 'xopt' and 'p.opt.hat'. 'xopt' contains the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations. 'p.opt.hat' returns the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations.
+The returned value is a named list containing
+\item{xopt}{a dataframe containing the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations}
+\item{p.opt.hat}{a vector containing the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations}
+\item{power}{the estimated power of the Naive Wald test for no intervention effect after the end of the study}
 }
 \description{
 This function takes as input several study design parameters of a multi-stage, multi-center per stage LAGO design and provides the estimated optimal intervention package through simulations. This function considers user supplied number of centers per stage and a user supplied number of samples per center in each stage. The required parameters that need to be supplied to the function are an initial starting intervention package which is optimized over the stages, the lower and upper limits for the components of the intervention package, the true or best guess beta values, number of stages K, number of centers per stage J, sample size per center per stage n, the unit costs for the intervention package components and the desired outcome goal for the LAGO study. Since this function returns the estimated optimal interventions through simulations, this function also needs as input the expected variation among subjects within each centers at any stage and the expected variation between the centers at any stage while implementing the intervention package.

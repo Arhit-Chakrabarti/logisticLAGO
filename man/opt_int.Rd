@@ -36,7 +36,9 @@ opt_int(
 \item{max_eval}{the maximum number of iterations to perform (default = 3000)}
 }
 \value{
-The function returns a named list 'Optimum_Intervention' containing the value of the optimum intervention package and 'Obtained_p' containing the outcome goal under the optimal intervention package.
+The returned value is a named list containing
+\item{Optimum_Intervention}{the optimum intervention package}
+\item{Obtained_p}{the outcome goal under the optimal intervention package}
 }
 \description{
 The first goal of a Learn-As-You-Go (LAGO) study is to identify the optimal intervention package while minimizing the cost of the intervention package subject to the probability of a desired binary outcome being above a given threshold. The current LAGO design considers a logistic regression model with linear cost coefficients.

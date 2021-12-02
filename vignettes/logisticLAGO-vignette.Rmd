@@ -146,7 +146,7 @@ The stage wise results from the optimization are as below
 results1 <- data.frame(sim_sc$xopt, sim_sc$p.opt.hat, c(sim_sc$power, "", ""))
 results1 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results1)
 rownames(results1) <- NULL
-colnames(results1) <- c("Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results1) <- c("Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 knitr::kable(results1, format = "html", digits = 3, caption = "Table 3")  
 ```
 ### Multi-center LAGO design 
@@ -178,7 +178,7 @@ The stage wise results from the multi-center LAGO optimization are as below
 results2 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
 results2 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results2)
 rownames(results2) <- NULL
-colnames(results2) <- c("Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results2) <- c("Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 knitr::kable(results2, format = "html", digits = 3, caption = "Table 4")  
 ```
 
@@ -199,7 +199,7 @@ The results of which are shown below
 results3 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
 results3 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results3)
 rownames(results3) <- NULL
-colnames(results3) <- c("Stage","$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results3) <- c("Stage","$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 knitr::kable(results3, format = "html", digits = 3, caption = "Table 5")  
 ```
 
@@ -227,7 +227,7 @@ The results are summarized below.
 results4 <- data.frame(sim_mc_uc.us$xopt, sim_mc_uc.us$p.opt.hat, c(round(sim_mc_uc.us$power, 2), "", ""))
 results4 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results4)
 rownames(results4) <- NULL
-colnames(results4) <- c("Stage","$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results4) <- c("Stage","$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 knitr::kable(results4, format = "html", digits = 3, caption = "Table 6")  
 ```
 
@@ -275,19 +275,19 @@ sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
 ```
 
 The results are summarized as below:
-```{r, echo=FALSE}
+```{r, echo = FALSE}
 results5 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
-colnames(results5) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results5) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 results6 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
-colnames(results6) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results6) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 results7 <- data.frame(sim_mc_uc.us$xopt, sim_mc_uc.us$p.opt.hat, c(round(sim_mc_uc.us$power, 2), "", ""))
-colnames(results7) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(results7) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 result = rbind(results5, results6, results7)
 rownames(result) = NULL
 result_full = cbind(c("Equal number of centers and samples", "", "", "Only uequal number of centers", "", "", "Unequal number of centers and samples", "", ""),
                     rep(c("Stage 1", "Stage 2", "Stage 3"), 3), 
                     result)
-colnames(result_full) = c("Case"," Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
+colnames(result_full) = c("Case"," Stage", "$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 
 knitr::kable(result_full, format = "html", digits = 3, caption = "Table of comparisons for the different multi-center LAGO designs")  
 ```
