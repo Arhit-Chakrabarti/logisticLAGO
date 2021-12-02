@@ -17,7 +17,7 @@ expit(beta, x, intercept = TRUE)
 This function returns the calculated probability of success under the logistic regression model for the given covariate vector and vector of parameters.
 }
 \description{
-This function calculates the success probabilities for the logistic regression model for a given vector of covariates and a vector of parameter values. The success probability for a given vector of covariates x and paramter vector beta is calculated as 1/(1 + exp(-beta' X))
+This function calculates the success probabilities for the logistic regression model for a given vector of covariates and a vector of parameter values. The success probability for a given vector of covariates x and parameter vector beta is calculated as 1/(1 + exp(-beta' X))
 }
 \examples{
 x = c(2.5, 12.5, 7)

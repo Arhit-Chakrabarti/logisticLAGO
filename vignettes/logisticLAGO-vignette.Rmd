@@ -60,7 +60,7 @@ If the desired outcome goal $\tilde{p}$ lies between the the probabilities i.e. 
 The *logisticLAGO* package can be used in two different settings, namely in a situation where a LAGO trial is ongoing and with the data being collected at any stage, the estimated optimal intervention package to be implemented in the next stage is desired and also in a situation before the starting of a LAGO study, where an idea about the optimal intervention package is desired. The two situations are considered separately over here.
 
 ## In an ongoing LAGO study
-At any stage of the study, once the data is available on the actual intervention received by the participants and their binary responses, they maybe used to estimate the parameters $\hat{\beta}$ using the accumulated data. The estimates $\hat{\beta}$, the intervention package rolled out at that stage $x$, along with information on their unit costs, upper and lower limits for the components of the intervention package may be used to estimate the optimal inetrvention package to be used in the next stage. 
+At any stage of the study, once the data is available on the actual intervention received by the participants and their binary responses, they maybe used to estimate the parameters $\hat{\beta}$ using the accumulated data. The estimates $\hat{\beta}$, the intervention package rolled out at that stage $x$, along with information on their unit costs, upper and lower limits for the components of the intervention package may be used to estimate the optimal intervention package to be used in the next stage. 
 
 ```{r, echo=TRUE}
 beta_est <- c( - 2.1350,  0.01899,  0.1989, 0.1273)
@@ -204,7 +204,7 @@ knitr::kable(results3, format = "html", digits = 3, caption = "Table 5")
 ```
 
 #### Multi-center LAGO with unequal number of centers per stage and unequal sample size in each center
-This is the general setup of any nulti-center LAGO study, wherein apart from unequal number of centers at each stage, an unequal number of samples are considered at each center of a stage. At the begining of a trial, apart from less number of centers, less number of participants are allocated to the trial and they are increased as the trail proceeds through the different stages and more data on the optimal intervention and response trend is available. The *mc_lago_uc.us* function considers different number of centers and sample size at each stage.
+This is the general setup of any multi-center LAGO study, wherein apart from unequal number of centers at each stage, an unequal number of samples are considered at each center of a stage. At the beginning of a trial, apart from less number of centers, less number of participants are allocated to the trial and they are increased as the trail proceeds through the different stages and more data on the optimal intervention and response trend is available. The *mc_lago_uc.us* function considers different number of centers and sample size at each stage.
 
 This function requires a list of sample sizes at each center of every stage.
 
@@ -274,7 +274,7 @@ sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
 
 ```
 
-The results are summmarized as below:
+The results are summarized as below:
 ```{r, echo=FALSE}
 results5 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
 colnames(results5) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "$Power$")
