@@ -49,8 +49,7 @@ sc_lago <- function(x0, lower, upper, nstages, beta.true, sample.size, icc, cost
   }
   if(length(cost.vec) != length(x0)) stop("length of cost vector and the length of intervention package do not match") # Cost vector should be equal to the number of components in the package
   if(prob < 0 | prob > 1) stop("desired probability of success can be between 0 and 1") # Probability should be between 0 and 1
-  if((nstages %% 1) != 0) stop("number of stages should be an integer") # number of stages should be an integer
-  if(nstages < 2) stop("number of stages should be >= 2") # Atleast 2 stages required for LAGO design
+  if((nstages %% 1) != 0 | nstages < 2) stop("number of stages should be an integer >= 2") # number of stages should be an integer
   if(icc <= 0) stop("expected variation should be positive")
 
   # Initializing objects for use in the simulation
