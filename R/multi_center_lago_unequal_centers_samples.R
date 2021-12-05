@@ -18,6 +18,7 @@
 #' \item{xopt}{a dataframe containing the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations}
 #' \item{p.opt.hat}{a vector containing the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations}
 #' \item{power}{the estimated power of the Naive Wald test for no intervention effect after the end of the study}
+#' (see \code{\link{mc_lago_uc}} for mult-center LAGO with unequal center per stage and equal sample size per center)
 #' @export
 #'
 #' @examples
