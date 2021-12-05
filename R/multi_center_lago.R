@@ -38,6 +38,24 @@
 #'                   cost.vec = cost_lin)
 #'
 mc_lago <- function(x0, lower, upper, nstages, centers, beta.true, sample.size, icc, cost.vec, prob, intercept = TRUE, B = 100){
+  # Compatibility checks for arguments
+  if(length(upper) != length(lower)) stop("lower and upper limits of the components are not at the same length") # Length of upper should be equal to length of lower ranges of the components
+  if(length(upper) != length(x0)) stop("length of x0 and upper and lower do not match") # Provided ranges of the components should have the same dimension as that of the intervention package itself
+
+  if (any(lower < 0)) stop("The intervention must have non-negative values only") # Non negative interventions only allowed
+  if (any(lower >= upper)) stop("Upper limits of the intervention package must be larger than corresponding lower limits") # Components cannot have lower ranges more than or equal to the upper values
+  if(intercept == TRUE & length(beta.true) != (length(x0) + 1)){
+    stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
+  }
+  if(intercept == FALSE & length(beta.true) != (length(x0))){
+    stop("Please check the dimension of provided beta.true value")
+  }
+  if(length(cost.vec) != length(x0)) stop("length of cost vector and the length of intervention package do not match") # Cost vector should be equal to the number of components in the package
+  if(prob < 0 | prob > 1) stop("desired probability of success can be between 0 and 1") # Probability should be between 0 and 1
+  if((nstages %% 1) != 0 | nstages < 2) stop("number of stages should be an integer >= 2") # number of stages should be an integer
+  if((centers %% 1) != 0 | centers < 0) stop("number of centers per stage should be an positive integer") # number of centers per stage should be an integer
+
+  if(icc <= 0) stop("expected variation should be positive")
   # Initializing objects for use in the simulation
   xopt <- array(NA, dim = c(nstages, length(x0), B)) # Array to store the optimal intervention
   p.opt.hat <- matrix(NA, nrow = nstages, ncol = B) # Matrix to store the obtained outcome goal
@@ -47,42 +65,42 @@ mc_lago <- function(x0, lower, upper, nstages, centers, beta.true, sample.size, 
     actual_intervention_clubbed <- NULL # Actual intervention to be initialized as NULL at every simulation
     x.start = x0 # Initial value of x at each simulation
     for(k in 1:nstages){
-        actual_intervention_all_centers <- NULL # Actual intervention for all the centers to be initialized as NULL at every stage
+      actual_intervention_all_centers <- NULL # Actual intervention for all the centers to be initialized as NULL at every stage
       for(j in 1:centers){
         actual_intervention = jitter_my(x.start, n = sample.size, variation = icc) # Create the intervention data by simulation per center per stage
         actual_intervention = truncate(x = actual_intervention, lower.limit = lower, upper.limit = upper) # Truncating the observations to their lower and upper limits so that interventions are not beyond their ranges
         actual_intervention_all_centers = rbind(actual_intervention_all_centers, actual_intervention) # Clubbing all the data from all the centers of any stage
       }
-        actual_intervention_clubbed = rbind(actual_intervention_clubbed, actual_intervention_all_centers) # Clubbing all the data from all the centers of all the stages so far
-        if(intercept == TRUE){
-          actual_intervention_full <- cbind(1, actual_intervention_all_centers) # Adding a column of 1's if intercept is added to the model
-        }else{
-          actual_intervention_full <- actual_intervention_all_centers # No need to add a column of 1's if intercept is not needed in the model
-        }
-        # Calculating the value of the linear predictor
-        lin_pred = t(beta.true * t(actual_intervention_full))
-        response <- rep(NA, sample.size * centers)  # Initialize the vector of responses
-        for(i in 1:(sample.size * centers)){
-          # Drawing samples from a Binomial distribution and prob = expit(the value of the linear predictor)
-          response[i] <- stats::rbinom(n = 1, size = 1, prob = expit_linpred(x = sum(lin_pred[i, ])))
-        }
-        # Clubbing in the response from all the stages
-        response_clubbed <- c(response_clubbed, response)
-        if(intercept == TRUE){
-          # If there is intercept in the model, fit the model with the intercept term
-          fit <- suppressWarnings(stats::glm(response_clubbed ~ actual_intervention_clubbed, family = "binomial"))
-        }else{
-          # If there is no intercept in the model, fit the model without the intercept term
-          fit <- suppressWarnings(stats::glm(response_clubbed ~ actual_intervention_clubbed - 1, family = "binomial"))
-        }
-        # Getting the beta estimates
-        beta_hat = unname(fit$coefficients)
-        # Running the LAGO optimization
-        opt_lago = logisticLAGO::opt_int(cost = cost.vec, beta = beta_hat, lower = lower, upper = upper, pstar = prob, starting.value = x.start, intercept)
-        xopt[k, ,b] = opt_lago$Optimum_Intervention
-        x.start = xopt[k, ,b]
-        p.opt.hat[k, b] = opt_lago$Obtained_p
+      actual_intervention_clubbed = rbind(actual_intervention_clubbed, actual_intervention_all_centers) # Clubbing all the data from all the centers of all the stages so far
+      if(intercept == TRUE){
+        actual_intervention_full <- cbind(1, actual_intervention_all_centers) # Adding a column of 1's if intercept is added to the model
+      }else{
+        actual_intervention_full <- actual_intervention_all_centers # No need to add a column of 1's if intercept is not needed in the model
       }
+      # Calculating the value of the linear predictor
+      lin_pred = t(beta.true * t(actual_intervention_full))
+      response <- rep(NA, sample.size * centers)  # Initialize the vector of responses
+      for(i in 1:(sample.size * centers)){
+        # Drawing samples from a Binomial distribution and prob = expit(the value of the linear predictor)
+        response[i] <- stats::rbinom(n = 1, size = 1, prob = expit_linpred(x = sum(lin_pred[i, ])))
+      }
+      # Clubbing in the response from all the stages
+      response_clubbed <- c(response_clubbed, response)
+      if(intercept == TRUE){
+        # If there is intercept in the model, fit the model with the intercept term
+        fit <- suppressWarnings(stats::glm(response_clubbed ~ actual_intervention_clubbed, family = "binomial"))
+      }else{
+        # If there is no intercept in the model, fit the model without the intercept term
+        fit <- suppressWarnings(stats::glm(response_clubbed ~ actual_intervention_clubbed - 1, family = "binomial"))
+      }
+      # Getting the beta estimates
+      beta_hat = unname(fit$coefficients)
+      # Running the LAGO optimization
+      opt_lago = logisticLAGO::opt_int(cost = cost.vec, beta = beta_hat, lower = lower, upper = upper, pstar = prob, starting.value = x.start, intercept)
+      xopt[k, ,b] = opt_lago$Optimum_Intervention
+      x.start = xopt[k, ,b]
+      p.opt.hat[k, b] = opt_lago$Obtained_p
+    }
     # Power calculation
     # If intercept == TRUE, the intercept is removed while calculating the Wald Test statistic
     if(intercept == TRUE){
@@ -110,4 +128,6 @@ mc_lago <- function(x0, lower, upper, nstages, centers, beta.true, sample.size, 
   # Returning the outputs
   return(list(xopt = opt.x, p.opt.hat = opt.p, power = power.obt))
 }
+
+
 
