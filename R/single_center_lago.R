@@ -35,6 +35,24 @@
 #'                   B = 100, intercept = TRUE)
 #'
 sc_lago <- function(x0, lower, upper, nstages, beta.true, sample.size, icc, cost.vec, prob, intercept = TRUE, B = 100){
+  # Compatibility checks for arguments
+  if(length(upper) != length(lower)) stop("lower and upper limits of the components are not at the same length") # Length of upper should be equal to length of lower ranges of the components
+  if(length(upper) != length(x0)) stop("length of x0 and upper and lower do not match") # Provided ranges of the components should have the same dimension as that of the intervention package itself
+
+  if (any(lower < 0)) stop("The intervention must have non-negative values only") # Non negative interventions only allowed
+  if (any(lower >= upper)) stop("Upper limits of the intervention package must be larger than corresponding lower limits") # Components cannot have lower ranges more than or equal to the upper values
+  if(intercept == TRUE & length(beta.true) != (length(x0) + 1)){
+    stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
+  }
+  if(intercept == FALSE & length(beta.true) != (length(x0))){
+    stop("Please check the dimension of provided beta.true value")
+  }
+  if(length(cost.vec) != length(x0)) stop("length of cost vector and the length of intervention package do not match") # Cost vector should be equal to the number of components in the package
+  if(prob < 0 | prob > 1) stop("desired probability of success can be between 0 and 1") # Probability should be between 0 and 1
+  if((nstages %% 1) != 0) stop("number of stages should be an integer") # number of stages should be an integer
+  if(nstages < 2) stop("number of stages should be >= 2") # Atleast 2 stages required for LAGO design
+  if(icc <= 0) stop("expected variation should be positive")
+
   # Initializing objects for use in the simulation
   xopt <- array(NA, dim = c(nstages, length(x0), B)) # Array to store the optimal intervention
   p.opt.hat <- matrix(NA, nrow = nstages, ncol = B) # Matrix to store the obtained outcome goal
@@ -52,7 +70,7 @@ sc_lago <- function(x0, lower, upper, nstages, beta.true, sample.size, icc, cost
       }else{
         actual_intervention_full <- actual_intervention # No need to add a column of 1's if intercept is not needed in the model
       }
-# Calculating the value of the linear predictor
+      # Calculating the value of the linear predictor
       lin_pred = t(beta.true * t(actual_intervention_full))
       response <- rep(NA, sample.size) # Initialize the vector of responses
       for(i in 1:sample.size){
