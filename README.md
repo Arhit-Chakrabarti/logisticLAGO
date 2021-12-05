@@ -18,7 +18,6 @@ Arhit Chakrabarti
             -   [Unequal number of centers per stage and unequal sample
                 size in each
                 center](#unequal-number-of-centers-per-stage-and-unequal-sample-size-in-each-center)
--   [To do](#to-do)
 -   [Details](#details)
 
 # Description
@@ -36,6 +35,7 @@ response.
 You can install logisticLAGO R package from GitHub with:
 
 ``` r
+# install.packages("devtools")
 devtools::install_github("Arhit-Chakrabarti/logisticLAGO")
 ```
 
@@ -161,11 +161,6 @@ mc_lago_uc.us(x0 = x0, lower = lower, upper = upper, beta.true = beta.true, nsta
 
 Here, the argument *sample.size* is a list denoting the sample size in
 each center of different stages.
-
-# To do
-
-In the remainder of the semester, I will be working on compatibility
-checks for the functions and creating the vignette for the package.
 
 # Details
 

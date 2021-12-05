@@ -19,6 +19,7 @@ The "Learn-As-You-Go" (LAGO) design is motivated by large scale public health in
 You can install logisticLAGO R package from GitHub with:
 
 ```{r, echo = TRUE, eval = FALSE}
+# install.packages("devtools")
 devtools::install_github("Arhit-Chakrabarti/logisticLAGO")
 ```
 Note that the library *devtools* needs to be installed before installing the R package from GitHub. 
@@ -74,9 +75,6 @@ The traditional design under multi-center LAGO study is considering different nu
 mc_lago_uc.us(x0 = x0, lower = lower, upper = upper, beta.true = beta.true, nstages = nstages, centers = centers, sample.size = sample.size, cost.vec = cost.vec, prob = prob, icc = icc, bcc = bcc)
 ```
 Here, the argument *sample.size* is a list denoting the sample size in each center of different stages.
-
-# To do
-In the remainder of the semester, I will be working on compatibility checks for the functions and creating the vignette for the package.
 
 # Details
 
