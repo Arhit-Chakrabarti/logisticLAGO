@@ -18,7 +18,7 @@
 #' \item{xopt}{a dataframe containing the stage-wise estimated optimum intervention package obtained by considering the median over the given number of simulations}
 #' \item{p.opt.hat}{a vector containing the stage-wise estimated success probabilities, i.e. the success probabilities corresponding to the estimated optimal intervention package by considering the median over simulations}
 #' \item{power}{the estimated power of the Naive Wald test for no intervention effect after the end of the study}
-#' (see \code{\link{mc_lago}} for mult-center LAGO with equal center per stage and equal sample size per center)
+#' (see \code{\link{mc_lago}} for multi-center LAGO with equal center per stage and equal sample size per center)
 #' @export
 #'
 #' @examples
@@ -40,8 +40,28 @@
 #'              icc = 0.1, bcc = 0.15)
 #'
 mc_lago_uc <- function(x0, lower, upper, nstages, centers, beta.true, sample.size, icc, bcc, cost.vec, prob, intercept = TRUE, B = 100){
+  # Compatibility checks for arguments
+  if(length(upper) != length(lower)) stop("lower and upper limits of the components are not at the same length") # Length of upper should be equal to length of lower ranges of the components
+  if(length(upper) != length(x0)) stop("length of x0 and upper and lower do not match") # Provided ranges of the components should have the same dimension as that of the intervention package itself
+
+  if (any(lower < 0)) stop("The intervention must have non-negative values only") # Non negative interventions only allowed
+  if (any(lower >= upper)) stop("Upper limits of the intervention package must be larger than corresponding lower limits") # Components cannot have lower ranges more than or equal to the upper values
+  if(intercept == TRUE & length(beta.true) != (length(x0) + 1)){
+    stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
+  }
+  if(intercept == FALSE & length(beta.true) != (length(x0))){
+    stop("Please check the dimension of provided beta.true value")
+  }
+  if(length(cost.vec) != length(x0)) stop("length of cost vector and the length of intervention package do not match") # Cost vector should be equal to the number of components in the package
+  if(prob < 0 | prob > 1) stop("desired probability of success can be between 0 and 1") # Probability should be between 0 and 1
+  if(nstages %% 1 != 0 | nstages < 2) stop("number of stages should be an integer >= 2") # number of stages should be an integer
+  if(any((centers %% 1) != 0) | any(centers <= 0)) stop("number of centers per stage should be an positive integer") # number of centers per stage should be an integer
+
+  if(icc <= 0) stop("expected variation within a center should be positive")
+  if(bcc <= 0) stop("expected variation between centers should be positive")
+
   if(length(centers) != nstages){
-    stop("Number of centers provided do not match the number of stages")
+    stop("number of centers provided do not match the number of stages")
   }
   # Initializing objects for use in the simulation
   xopt <- array(NA, dim = c(nstages, length(x0), B)) # Array to store the optimal intervention
