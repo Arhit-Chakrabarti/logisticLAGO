@@ -34,17 +34,18 @@
 #'                    upper = x.u, pstar = p_bar, starting.value = x.init)
 opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept = TRUE, eps = 1.0e-7, max_eval = 3000){
   # Checks
-  if(length(upper) != length(lower)) stop("lower and upper limits of the components are not at the same length")
-  if (any(lower < 0)) stop("The intervention must have non-negative values only")
-  if (any(lower >= upper)) stop("Upper limits of the intervention package must be larger than corresponding lower limits")
+  if(length(upper) != length(lower)) stop("lower and upper limits of the components are not of the same length") # Length of upper should be equal to length of lower ranges of the components
+  if(length(upper) != length(starting.value)) stop("length of starting.value and upper and lower do not match") # Provided ranges of the components should have the same dimension as that of the intervention package itself
+  if (any(lower < 0)) stop("The intervention must have non-negative values only") # Non negative interventions only allowed
+  if (any(lower >= upper)) stop("Upper limits of the intervention package must be larger than corresponding lower limits")  # Components cannot have lower ranges more than or equal to the upper values
   if(intercept == TRUE & length(beta) != (length(starting.value) + 1)){
     stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
   }
   if(intercept == FALSE & length(beta) != length(starting.value)){
     stop("Please check the dimension of provided beta value")
   }
-  if(length(cost) != length(starting.value)) stop("length of cost vector and the length of intervention package do not match")
-  if(pstar < 0 | pstar > 1) stop("desired probability of success can be between 0 and 1")
+  if(length(cost) != length(starting.value)) stop("length of cost vector and the length of intervention package do not match")  # Cost vector should be equal to the number of components in the package
+  if(pstar < 0 | pstar > 1) stop("desired probability of success can be between 0 and 1") # Probability should be between 0 and 1
   #Defining Objective Function
   eval_f <- function(x) {
     obj<- sum(cost * x) # Total cost of the intervention package
