@@ -40,7 +40,11 @@ opt_int <- function(cost, beta, lower, upper, starting.value, pstar, intercept =
   if(intercept == TRUE & length(beta) != (length(starting.value) + 1)){
     stop("Please provide the correspodning beta0 value if the model should include the intercept. Else please change intercept to FALSE")
   }
-
+  if(intercept == FALSE & length(beta) != length(starting.value)){
+    stop("Please check the dimension of provided beta value")
+  }
+  if(length(cost) != length(starting.value)) stop("length of cost vector and the length of intervention package do not match")
+  if(pstar < 0 | pstar > 1) stop("desired probability of success can be between 0 and 1")
   #Defining Objective Function
   eval_f <- function(x) {
     obj<- sum(cost * x) # Total cost of the intervention package
