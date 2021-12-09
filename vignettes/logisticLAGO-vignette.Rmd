@@ -62,7 +62,7 @@ The *logisticLAGO* package can be used in two different settings, namely in a si
 ## In an ongoing LAGO study
 At any stage of the study, once the data is available on the actual intervention received by the participants and their binary responses, they maybe used to estimate the parameters $\hat{\beta}$ using the accumulated data. The estimates $\hat{\beta}$, the intervention package rolled out at that stage $x$, along with information on their unit costs, upper and lower limits for the components of the intervention package may be used to estimate the optimal intervention package to be used in the next stage. 
 
-```{r, echo=TRUE}
+```{r, echo = TRUE, warning = FALSE}
 beta_est <- c( - 2.1350,  0.01899,  0.1989, 0.1273)
 x.l <- c(1, 10, 2) # Lower limits for X
 x.u <- c(4, 15, 15) # Upper limits for X
@@ -106,14 +106,14 @@ knitr::kable(matrix(c(prob_lower, prob_upper), nrow = 1), format = "html", digit
              col.names = c("Outcome goal at lower limit", "Outcome goal at upper limit")) 
 ```
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, warning = FALSE}
 ## Running the LAGO optimization algorithm
 opt_lago1 = opt_int(cost = cost_lin, beta = beta_est, lower = x.l,
                    upper = x.u, pstar = p_bar, starting.value = x.start)
 ```
 
 The results from the optimization are summarized in the table below, which gives the estimated optimal intervention package and the success probabilities under the estimated optimal intervention package.
-```{r, echo=FALSE}
+```{r, echo = FALSE}
 opt.x <- matrix(c(opt_lago1$Optimum_Intervention, opt_lago1$Obtained_p), nrow = 1)
 colnames(opt.x) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$")
 knitr::kable(opt.x, format = "html", digits = 3, caption = "Table 2")  
@@ -124,7 +124,7 @@ The main purpose of this package is to consider the situation before starting of
 ### Single center LAGO design
 The simplest case is when the trial is designed to be conducted in a single center or location and is conducted over multiple stages. The number of stages (*nstages*) in the LAGO design, sample size per stage (*sample.size*), the unit costs for the intervention package components (*cost.vec*), the vector of minimum (*lower*) and maximum (*upper*) values of the components of the intervention package, desired outcome goal (*prob*), the best guess intervention effect (*beta.true*) and the initial value of intervention package (*x0*) along with the expected variation in rolling out the intervention package (*icc*) are used to simulate the estimated intervention package over the different stages, the estimated outcome goal and the estimated power of the test of "*no-intervention*" effect at the end of the study.
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, warning = FALSE}
 x.init = c(2.5, 12.5, 7) # Initial value interventions
 x.l = c(1, 10, 2) # Lower limits for X
 x.u = c(4, 15, 15) # Upper limits for X
@@ -142,7 +142,7 @@ sim_sc <- sc_lago(x0 = x.init, lower = x.l, upper = x.u,
                B = 100, intercept = TRUE)
 ```
 The stage wise results from the optimization are as below
-```{r, echo=FALSE}
+```{r, echo = FALSE, warning = FALSE}
 results1 <- data.frame(sim_sc$xopt, sim_sc$p.opt.hat, c(sim_sc$power, "", ""))
 results1 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results1)
 rownames(results1) <- NULL
@@ -155,7 +155,7 @@ The multi-center LAGO design extends the idea of the single center LAGO study to
 #### Multi-center LAGO with equal number of centers per stage and equal sample size in each center
 This is is a special case of multi-center LAGO with equal number of centers and equal sample size at each center at each stage of the design. The *mc_lago* function in this package can be used to simulate the data for this design and perform the optimization.  Apart from the information as required by the single center design, the number of centers per stage (*centers*) and sample size per center per stage (*sample.size*) is used to simulate the optimal intervention package to be rolled out in each of the centers in the next stage such that the goals of the study are met. As before, estimated power for the test of "*no-intervention*" effect at the end of the study is also provided through simulations. 
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, warning = FALSE}
 x.init = c(2.5, 12.5, 7) # Initial value interventions
 x.l = c(1, 10, 2) # Lower limits for X
 x.u = c(4, 15, 15) # Upper limits for X
@@ -174,7 +174,7 @@ sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u,
                    cost.vec = cost_lin)
 ```
 The stage wise results from the multi-center LAGO optimization are as below
-```{r, echo=FALSE}
+```{r, echo = FALSE, warning = FALSE}
 results2 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
 results2 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results2)
 rownames(results2) <- NULL
@@ -185,7 +185,7 @@ knitr::kable(results2, format = "html", digits = 3, caption = "Table 4")
 #### Multi-center LAGO with unequal number of centers per stage and equal sample size in each center
 In any trial, it is intuitive to conduct the study in small number of centers at the beginning i.e. at the pilot stage and progressively increase the number of centers as the trial progresses from the pilot stage. The *mc_lago_uc* function considers different number of centers in each stage. However every center at any stage have equal samples. The function arguments are the same as the *mc_lago* function expect, that the argument **centers** is a vector of same dimension as **nstages** denoting the number of centers in each stage of the design. This function also differentiates between center and within center variations while considering simulations.
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, warning = FALSE}
 J_uc = c(3, 5, 10) # Number of centers per stage
 # Running the Multi-center LAGO simulation study
 sim_mc_uc <- mc_lago_uc(x0 = x.init, lower = x.l,
@@ -195,7 +195,7 @@ sim_mc_uc <- mc_lago_uc(x0 = x.init, lower = x.l,
               icc = 0.1, bcc = 0.15)
 ```
 The results of which are shown below
-```{r, echo=FALSE}
+```{r, echo = FALSE, warning = FALSE}
 results3 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
 results3 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results3)
 rownames(results3) <- NULL
@@ -208,7 +208,7 @@ This is the general setup of any multi-center LAGO study, wherein apart from une
 
 This function requires a list of sample sizes at each center of every stage.
 
-```{r}
+```{r, warning = FALSE}
 J_uc = c(3, 5, 10) # Number of centers per stage
 sample_size = list() # Initialize sample size per center at each stage
 sample_size[[1]] = 20 # Sample size per center at stage 1 is 20
@@ -223,7 +223,7 @@ sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
 
 ```
 The results are summarized below.
-```{r, echo=FALSE}
+```{r, echo = FALSE, warning = FALSE}
 results4 <- data.frame(sim_mc_uc.us$xopt, sim_mc_uc.us$p.opt.hat, c(round(sim_mc_uc.us$power, 2), "", ""))
 results4 <- cbind(c("Stage 1", "Stage 2", "Stage 3"), results4)
 rownames(results4) <- NULL
@@ -243,7 +243,7 @@ As a comparison of how the three methods compare, the results from the three dif
    * 21 in stage 2
    * 30 in stage 3 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 njk = 50
 sim_mc <- mc_lago(x0 = x.init, lower = x.l, upper = x.u,
                    beta.true = beta, nstages = K,
@@ -275,7 +275,7 @@ sim_mc_uc.us <- mc_lago_uc.us(x0 = x.init, lower = x.l,
 ```
 
 The results are summarized as below:
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 results5 <- data.frame(sim_mc$xopt, sim_mc$p.opt.hat, c(sim_mc$power, "", ""))
 colnames(results5) <- c("$\\hat{x}_1$", "$\\hat{x}_2$", "$\\hat{x}_3$", "$\\hat{p}$", "Power")
 results6 <- data.frame(sim_mc_uc$xopt, sim_mc_uc$p.opt.hat, c(round(sim_mc_uc$power, 2), "", ""))
