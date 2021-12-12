@@ -36,11 +36,21 @@ You can install logisticLAGO R package from GitHub with:
 
 ``` r
 # install.packages("devtools")
+# install the package without building vignettes
 devtools::install_github("Arhit-Chakrabarti/logisticLAGO")
 ```
 
-Note that the library *devtools* needs to be installed before installing
-the R package from GitHub.
+**Note**: The library *devtools* needs to be installed before installing
+the R package from GitHub. Please note that this package includes
+vignettes which provides further guidelines on how to use the functions
+in this R package. To install the logisticLAGO package with the
+vignettes, use the code
+
+``` r
+# install.packages("devtools")
+# install the package building vignettes
+devtools::install_github("Arhit-Chakrabarti/logisticLAGO", build_vignettes = TRUE, force = TRUE)
+```
 
 # Usage
 
@@ -71,11 +81,11 @@ minimized. To estimate the optimum intervention package, the vector of
 per unit costs for the components of the intervention package (*cost*),
 the vector of minimum (*lower*) and maximum (*upper*) values of the
 components of the intervention package, desired outcome goal (*pstar*),
-the estimated *β̂* (*beta*) from fitting a logistic regression model to
-the observed response, which gives the estimated effect of the
-corresponding intervention package and the intervention package rolled
-out at the current stage (*starting.value*) are required. The estimated
-optimal intervention is given by the function *opt\_int*
+the estimated (*beta*) from fitting a logistic regression model to the
+observed response, which gives the estimated effect of the corresponding
+intervention package and the intervention package rolled out at the
+current stage (*starting.value*) are required. The estimated optimal
+intervention is given by the function *opt\_int*
 
 ``` r
 opt_int(cost = cost, beta = beta, lower = lower, upper = upper, pstar = pstar, starting.value = starting.value)
